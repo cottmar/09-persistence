@@ -12,14 +12,14 @@ afterAll(() => server.stop());
 
 describe('VALID request to the API', () => {
   describe('POST /api/v1/doge', () => {
-    it('should respond with status 200 and create a new doge', () => {
+    it('should respond with status 201 and create a new doge', () => {
       return superagent.post(`:${testPort}/api/v1/doge`)
         .send(mockResource)
         .then((response) => {
           mockId = response.body.id;
           expect(response.body.name).toEqual(mockResource.name);
           expect(response.body.breed).toEqual(mockResource.breed);
-          expect(response.status).toEqual(200);
+          expect(response.status).toEqual(201);
         });
     });
   });
@@ -29,12 +29,7 @@ describe('VALID request to the API', () => {
       it('should respond with status 400 if no request body was provided or the body was invalid', () => {
         return superagent.post(`:${testPort}/api/v1/doge`)
           .send({})
-          .then((response) => {
-            mockId = response.body.id;
-            expect(response.body.name).toEqual(mockResource.name);
-            expect(response.body.breed).toEqual(mockResource.breed);
-            expect(response.status).toEqual(400);
-          })
+          .then()
           .catch((err) => {
             expect(err).toBeTruthy();
             expect(err.status).toEqual(400);

@@ -37,7 +37,7 @@ module.exports = function routeDoge(router) {
       })
       .catch((err) => {
         logger.log(logger.ERROR, err, JSON.stringify(err));
-        response.sendText(res, 404, 'Resouce not found');
+        response.sendText(res, 404, 'Resource not found');
         return undefined;
       });
     return undefined;
