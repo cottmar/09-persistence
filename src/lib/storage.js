@@ -40,7 +40,7 @@ storage.fetchAll = function fetchAll(schema, id) {
   if (!schema) return Promise.reject(new Error('expected schema name'));
   if (!id) return Promise.reject(new Error('expected id'));
 
-  return fs.readFileProm(`${__dirname}/../data/${schema}/${id}.json`)
+  return fs.readDirProm(`${__dirname}/../data/${schema}/${id}.json`)
     .then((data) => {
       try {
         const doge = JSON.parse(data.toString());
