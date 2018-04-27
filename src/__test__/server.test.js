@@ -12,7 +12,7 @@ afterAll(() => server.stop());
 
 describe('VALID request to the API', () => {
   describe('POST /api/v1/doge', () => {
-    it('should respond with status 200 and created a new doge', () => {
+    it('should respond with status 200 and create a new doge', () => {
       return superagent.post(`:${testPort}/api/v1/doge`)
         .send(mockResource)
         .then((response) => {

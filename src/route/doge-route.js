@@ -3,25 +3,22 @@
 const logger = require('../lib/logger');
 const Doge = require('../model/doge');
 const storage = require('../lib/storage');
+const response = require('../lib/response');
 
-module.exports = function routeNote(router) {
+module.exports = function routeDoge(router) {
   router.post('/api/v1/doge', (req, res) => {
-    logger.log(logger.INFO, 'NOTE-ROUTE: POST /api/v1/doge');
+    logger.log(logger.INFO, 'DOGE-ROUTE: POST /api/v1/doge');
 
     try {
       const newDoge = new Doge(req.body.name, req.body.breed);
       storage.create('Doge', newDoge)
         .then((doge) => {
-          res.writeHead(200, { 'Content-Type': 'application/json' });
-          res.write(JSON.stringify(doge));
-          res.end();
+          response.sendJSON(res, 201, doge);
           return undefined;
         });
     } catch (err) {
       logger.log(logger.ERROR, `DOGE-ROUTE: There was a bad request ${err}`);
-      res.writeHead(400, { 'Content-Type': 'text/plain' });
-      res.write('Bad request THIS OTHER ONE');
-      res.end();
+      response.sendText(res, 400, err.message);
       return undefined;
     }
     return undefined;
@@ -29,24 +26,18 @@ module.exports = function routeNote(router) {
 
   router.get('/api/v1/doge', (req, res) => {
     if (!req.url.query.id) {
-      res.writeHead(404, { 'Content-Type': 'text/plain' });
-      res.write('Your request requires an id');
-      res.end();
+      response.sendText(res, 404, 'Your request requires an id');
       return undefined;
     }
 
     storage.fetchOne('Doge', req.url.query.id)
       .then((item) => {
-        res.writeHead(200, { 'Content-Type': 'application/json' });
-        res.write(JSON.stringify(item));
-        res.end();
+        response.sendJSON(res, 200, item);
         return undefined;
       })
       .catch((err) => {
         logger.log(logger.ERROR, err, JSON.stringify(err));
-        res.writeHead(404, { 'Content-Type': 'text/plain' });
-        res.write('Not found');
-        res.end();
+        response.sendText(res, 404, 'Resouce not found');
         return undefined;
       });
     return undefined;
